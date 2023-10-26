@@ -1,5 +1,7 @@
 # An AIOps System
 
+![AIOps System Architecture](./aiops_system_architecture.png)
+
 ## Table of Contents
 
 1. [GKE Cluster](#gke-cluster)
