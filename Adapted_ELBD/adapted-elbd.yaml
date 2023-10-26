@@ -1,0 +1,55 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: elbd-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: elbd
+  template:
+    metadata:
+      labels:
+        app: elbd
+    spec:
+      containers:
+      - name: elbd
+        image: hyluvavu/adapted_elbd
+        resources:
+          requests:
+            cpu: "500m"
+            memory: "1Gi"
+          limits:
+            cpu: "2"
+            memory: "4Gi"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: elbd-service
+spec:
+  selector:
+    app: elbd
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+  type: ClusterIP
+
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: elbd-cronjob
+spec:
+  schedule: "0 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: elbd-container
+            image: hyluvavu/adapted_elbd
+          restartPolicy: OnFailure

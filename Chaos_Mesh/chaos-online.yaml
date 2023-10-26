@@ -1,0 +1,76 @@
+apiVersion: chaos-mesh.org/v1alpha1
+kind: Workflow
+metadata:
+  name: chaos-hour
+spec:
+  entry: the-entry
+  templates:
+    - name: the-entry
+      templateType: Serial
+      children:
+        - carts-network-delay
+        - suspending
+        - front-end-cpu-hog
+        - suspending
+        - orders-memory-leak
+        - suspending
+        - payment-cpu-hog
+    - name: carts-network-delay
+      templateType: NetworkChaos
+      deadline: 5m
+      networkChaos:
+        direction: to
+        action: delay
+        mode: all
+        selector:
+          namespaces:
+            - sock-shop
+          labelSelectors:
+            name: 'carts'
+        delay:
+          latency: '300ms'
+    - name: front-end-cpu-hog
+      templateType: StressChaos
+      deadline: 5m
+      stressChaos:
+        mode: all
+        selector:
+          namespaces:
+            - sock-shop
+          labelSelectors:
+            name: 'front-end'
+        stressors:
+          cpu:
+            workers: 1
+            load: 50
+    - name: orders-memory-leak
+      templateType: StressChaos
+      deadline: 5m
+      stressChaos:
+        mode: all
+        selector:
+          namespaces:
+            - sock-shop
+          labelSelectors:
+            name: 'orders'
+        stressors:
+          memory:
+            workers: 1
+            size: '800MB'
+    - name: payment-cpu-hog
+      templateType: StressChaos
+      deadline: 5m
+      stressChaos:
+        mode: all
+        selector:
+          namespaces:
+            - sock-shop
+          labelSelectors:
+            name: 'payment'
+        stressors:
+          cpu:
+            workers: 1
+            load: 99
+    - name: suspending
+      templateType: Suspend
+      deadline: 10m

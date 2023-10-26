@@ -1,0 +1,391 @@
+apiVersion: chaos-mesh.org/v1alpha1
+kind: Workflow
+metadata:
+  name: serial-workflow
+spec:
+  entry: the-entry
+  templates:
+    - name: the-entry
+      templateType: Serial
+      children:
+        - carts-network-delay
+        - suspending
+        - carts-cpu-hog
+        - suspending
+        - carts-memory-leak
+        - suspending
+        - carts-network-delay
+        - suspending
+        - carts-cpu-hog
+        - suspending
+        - carts-memory-leak
+        - suspending
+        - catalogue-network-delay
+        - suspending
+        - catalogue-cpu-hog
+        - suspending
+        - catalogue-memory-leak
+        - suspending
+        - catalogue-network-delay
+        - suspending
+        - catalogue-cpu-hog
+        - suspending
+        - catalogue-memory-leak
+        - suspending
+        - front-end-network-delay
+        - suspending
+        - front-end-cpu-hog
+        - suspending
+        - front-end-memory-leak
+        - suspending
+        - front-end-network-delay
+        - suspending
+        - front-end-cpu-hog
+        - suspending
+        - front-end-memory-leak
+        - suspending
+        - orders-network-delay
+        - suspending
+        - orders-cpu-hog
+        - suspending
+        - orders-memory-leak
+        - suspending
+        - orders-network-delay
+        - suspending
+        - orders-cpu-hog
+        - suspending
+        - orders-memory-leak
+        - suspending
+        - payment-network-delay
+        - suspending
+        - payment-cpu-hog
+        - suspending
+        - payment-memory-leak
+        - suspending
+        - payment-network-delay
+        - suspending
+        - payment-cpu-hog
+        - suspending
+        - payment-memory-leak
+        - suspending
+        - shipping-network-delay
+        - suspending
+        - shipping-cpu-hog
+        - suspending
+        - shipping-memory-leak
+        - suspending
+        - shipping-network-delay
+        - suspending
+        - shipping-cpu-hog
+        - suspending
+        - shipping-memory-leak
+        - suspending
+        - user-network-delay
+        - suspending
+        - user-cpu-hog
+        - suspending
+        - user-memory-leak
+        - suspending
+        - user-network-delay
+        - suspending
+        - user-cpu-hog
+        - suspending
+        - user-memory-leak
+        - suspending
+    - name: carts-network-delay
+      templateType: NetworkChaos
+      deadline: 5m
+      networkChaos:
+        direction: to
+        action: delay
+        mode: all
+        selector:
+          namespaces:
+            - sock-shop
+          labelSelectors:
+            name: 'carts'
+        delay:
+          latency: '300ms'
+    - name: carts-cpu-hog
+      templateType: StressChaos
+      deadline: 5m
+      stressChaos:
+        mode: all
+        selector:
+          namespaces:
+            - sock-shop
+          labelSelectors:
+            name: 'carts'
+        stressors:
+          cpu:
+            workers: 1
+            load: 80
+    - name: carts-memory-leak
+      templateType: StressChaos
+      deadline: 5m
+      stressChaos:
+        mode: all
+        selector:
+          namespaces:
+            - sock-shop
+          labelSelectors:
+            name: 'carts'
+        stressors:
+          memory:
+            workers: 1
+            size: '800MB'
+    - name: catalogue-network-delay
+      templateType: NetworkChaos
+      deadline: 5m
+      networkChaos:
+        direction: to
+        action: delay
+        mode: all
+        selector:
+          namespaces:
+            - sock-shop
+          labelSelectors:
+            name: 'catalogue'
+        delay:
+          latency: '300ms'
+    - name: catalogue-cpu-hog
+      templateType: StressChaos
+      deadline: 5m
+      stressChaos:
+        mode: all
+        selector:
+          namespaces:
+            - sock-shop
+          labelSelectors:
+            name: 'catalogue'
+        stressors:
+          cpu:
+            workers: 1
+            load: 99
+    - name: catalogue-memory-leak
+      templateType: StressChaos
+      deadline: 5m
+      stressChaos:
+        mode: all
+        selector:
+          namespaces:
+            - sock-shop
+          labelSelectors:
+            name: 'catalogue'
+        stressors:
+          memory:
+            workers: 1
+            size: '1024MB'
+    - name: front-end-network-delay
+      templateType: NetworkChaos
+      deadline: 5m
+      networkChaos:
+        direction: to
+        action: delay
+        mode: all
+        selector:
+          namespaces:
+            - sock-shop
+          labelSelectors:
+            name: 'front-end'
+        delay:
+          latency: '300ms'
+    - name: front-end-cpu-hog
+      templateType: StressChaos
+      deadline: 5m
+      stressChaos:
+        mode: all
+        selector:
+          namespaces:
+            - sock-shop
+          labelSelectors:
+            name: 'front-end'
+        stressors:
+          cpu:
+            workers: 1
+            load: 50
+    - name: front-end-memory-leak
+      templateType: StressChaos
+      deadline: 5m
+      stressChaos:
+        mode: all
+        selector:
+          namespaces:
+            - sock-shop
+          labelSelectors:
+            name: 'front-end'
+        stressors:
+          memory:
+            workers: 1
+            size: '950MB'
+    - name: orders-network-delay
+      templateType: NetworkChaos
+      deadline: 5m
+      networkChaos:
+        direction: to
+        action: delay
+        mode: all
+        selector:
+          namespaces:
+            - sock-shop
+          labelSelectors:
+            name: 'orders'
+        delay:
+          latency: '300ms'
+    - name: orders-cpu-hog
+      templateType: StressChaos
+      deadline: 5m
+      stressChaos:
+        mode: all
+        selector:
+          namespaces:
+            - sock-shop
+          labelSelectors:
+            name: 'orders'
+        stressors:
+          cpu:
+            workers: 1
+            load: 99
+    - name: orders-memory-leak
+      templateType: StressChaos
+      deadline: 5m
+      stressChaos:
+        mode: all
+        selector:
+          namespaces:
+            - sock-shop
+          labelSelectors:
+            name: 'orders'
+        stressors:
+          memory:
+            workers: 1
+            size: '800MB'
+    - name: payment-network-delay
+      templateType: NetworkChaos
+      deadline: 5m
+      networkChaos:
+        direction: to
+        action: delay
+        mode: all
+        selector:
+          namespaces:
+            - sock-shop
+          labelSelectors:
+            name: 'payment'
+        delay:
+          latency: '300ms'
+    - name: payment-cpu-hog
+      templateType: StressChaos
+      deadline: 5m
+      stressChaos:
+        mode: all
+        selector:
+          namespaces:
+            - sock-shop
+          labelSelectors:
+            name: 'payment'
+        stressors:
+          cpu:
+            workers: 1
+            load: 99
+    - name: payment-memory-leak
+      templateType: StressChaos
+      deadline: 5m
+      stressChaos:
+        mode: all
+        selector:
+          namespaces:
+            - sock-shop
+          labelSelectors:
+            name: 'payment'
+        stressors:
+          memory:
+            workers: 1
+            size: '1024MB'
+    - name: shipping-network-delay
+      templateType: NetworkChaos
+      deadline: 5m
+      networkChaos:
+        direction: to
+        action: delay
+        mode: all
+        selector:
+          namespaces:
+            - sock-shop
+          labelSelectors:
+            name: 'shipping'
+        delay:
+          latency: '300ms'
+    - name: shipping-cpu-hog
+      templateType: StressChaos
+      deadline: 5m
+      stressChaos:
+        mode: all
+        selector:
+          namespaces:
+            - sock-shop
+          labelSelectors:
+            name: 'shipping'
+        stressors:
+          cpu:
+            workers: 1
+            load: 99
+    - name: shipping-memory-leak
+      templateType: StressChaos
+      deadline: 5m
+      stressChaos:
+        mode: all
+        selector:
+          namespaces:
+            - sock-shop
+          labelSelectors:
+            name: 'shipping'
+        stressors:
+          memory:
+            workers: 1
+            size: '800MB'
+    - name: user-network-delay
+      templateType: NetworkChaos
+      deadline: 5m
+      networkChaos:
+        direction: to
+        action: delay
+        mode: all
+        selector:
+          namespaces:
+            - sock-shop
+          labelSelectors:
+            name: 'user'
+        delay:
+          latency: '300ms'
+    - name: user-cpu-hog
+      templateType: StressChaos
+      deadline: 5m
+      stressChaos:
+        mode: all
+        selector:
+          namespaces:
+            - sock-shop
+          labelSelectors:
+            name: 'user'
+        stressors:
+          cpu:
+            workers: 1
+            load: 99
+    - name: user-memory-leak
+      templateType: StressChaos
+      deadline: 5m
+      stressChaos:
+        mode: all
+        selector:
+          namespaces:
+            - sock-shop
+          labelSelectors:
+            name: 'user'
+        stressors:
+          memory:
+            workers: 1
+            size: '1024MB'
+    - name: suspending
+      templateType: Suspend
+      deadline: 10m
