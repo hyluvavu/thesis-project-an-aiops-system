@@ -252,7 +252,7 @@ kubectl port-forward svc/seal-influxdb2 8086:80
 - Web UI: `http://localhost:8086`
 - Username: `adminuser`
 - Password: `adminuser`
-- Add new buckets named `ELBD` and `CausalRCA`
+- Create two buckets named `ELBD` and `CausalRCA`, respectively
 
 ### Querying InfluxDB:
 
