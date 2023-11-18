@@ -1,6 +1,6 @@
 # An AIOps System
 
-![AIOps System Architecture](./aiops_system_architecture.png)
+![AIOps System Experiment Overview](./aiops_system_experiment_overview.png)
 
 ## Table of Contents
 
