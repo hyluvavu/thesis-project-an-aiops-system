@@ -1,8 +1,26 @@
-# An AIOps System
+# Real-Time AIOps for Cloud Microservices: Anomaly Detection, Root Cause Analysis & Data Visualization
+
+This is a real-time Artificial Intelligence for IT Operations (AIOps) system that integrates anomaly detection, root cause analysis, and data visualization in the context of a microservice architecture, using technologies and tools including Google Kubernetes Engine (GKE), Prometheus, Istio, adapted ELBD, adapted CausalRCA, InfluxDB, and Grafana. This integration enhances the system's ability to not just detect but also understand the anomalies in real-time.
+
+![AIOps System Conceptual Architecture](./aiops_system_conceptual_architecture.png)
+*Conceptual architecture of the AIOps system*
+
+<br>
 
 ![AIOps System Experiment Overview](./aiops_system_experiment_overview.png)
+*Overview of the AIOps system experiment design*
 
-## Table of Contents
+## Motivation
+
+AIOps platforms collect various types of data and leverage AI models to offer valuable insights for building and operating services. Notably:
+
+- While AIOps solutions often focus on single tasks such as anomaly detection and root cause analysis, combining multiple functions can offer a wider range of capabilities to enhance IT operations
+
+- Many AIOps solutions operate offline, training machine learning models with batch monitoring data; however, if an AIOps solution operates online in real time, it can continuously collect and analyze data to provide rapid insights
+
+Our motivation stems from the need for an integrated, real-time AIOps system tailored for cloud-based microservices. By combining anomaly detection, root cause analysis, and data visualization, our project offers adaptability and responsiveness crucial in today's dynamic IT environments.
+
+## Installation and Deployment
 
 1. [GKE Cluster](#gke-cluster)
 2. [Sock Shop](#sock-shop)
@@ -19,7 +37,7 @@
 
 ## GKE Cluster
 
-Google's Kubernetes Engine (GKE) serves as the backbone of our AIOps system. For additional details, please visit [GKE's official documentation](https://cloud.google.com/kubernetes-engine).
+A GKE cluster serves as the backbone of our AIOps system. For additional details, please visit [GKE's official documentation](https://cloud.google.com/kubernetes-engine).
 
 ### Cluster Basics
 
@@ -64,7 +82,7 @@ Google's Kubernetes Engine (GKE) serves as the backbone of our AIOps system. For
 
 ## Sock Shop
 
-Sock Shop is our test application. More details can be found [here](https://microservices-demo.github.io/).
+Sock Shop is the microservice architecture used to evaluate our AIOps system in this project. More details can be found [here](https://microservices-demo.github.io/).
 
 **Deployment:**
 ```bash
@@ -72,7 +90,7 @@ kubectl apply -f sock-shop.yaml
 ```
 
 **Access:**
-- Access through the Frontend microservice via its external load balancer endpoint; in this project, it is: http://34.90.74.142:80
+- Access through the Frontend microservice via its external load balancer endpoint; for instance, in this project it has been: http://34.90.74.142:80
 
 ---
 
@@ -146,7 +164,7 @@ helm upgrade octopus prometheus-community/kube-prometheus-stack -f prometheus-va
 
 ## Locust
 
-Locust is utilized for generating workload. Its installation is done through Helm. More info is available at [Locust's homepage](https://locust.io/).
+Locust is utilized for generating workload. Its installation is done through Helm. More information is available at [Locust's homepage](https://locust.io/).
 
 **Write Load Tests:**
 - In `locustfile.py`
@@ -181,7 +199,7 @@ Locust is utilized for generating workload. Its installation is done through Hel
         ```bash
         helm install dolphin deliveryhero/locust -f load-balancer-values.yaml
         ```
-    - Web UI: `http://34.91.160.140:8089`
+    - Web UI in this project has been: `http://34.91.160.140:8089`
 
 **Load Test Parameters:**
 - Number of users: 300
@@ -192,7 +210,7 @@ Locust is utilized for generating workload. Its installation is done through Hel
 
 ## Chaos Mesh
 
-Chaos Mesh is used for anomaly injection. Installation details can be found at [Chaos Mesh website](https://chaos-mesh.org/).
+Chaos Mesh is used for anomaly injection with the aim to test the performance of our AIOps system. Installation details can be found at [Chaos Mesh website](https://chaos-mesh.org/).
 
 **Add Helm Repo and Update:**
 ```bash
@@ -231,7 +249,7 @@ kubectl port-forward -n chaos-mesh svc/chaos-dashboard 2333:2333
 
 ## InfluxDB
 
-InfluxDB stores metrics and results. More details can be found [here](https://www.influxdata.com/).
+InfluxDB stores the results of anomaly detection and root cause analysis, and serves as a data source for data visualization. More details can be found [here](https://www.influxdata.com/).
 
 **Add Helm Repo and Update:**
 ```bash
@@ -243,7 +261,7 @@ helm repo update
 ```bash
 helm install seal influxdata/influxdb2 -f influxdb-values.yaml
 ```
-Note: 'seal' is the release name here; the InfluxDB v2 chart is installed, with the custom values.
+Note: 'seal' here is the release name; the InfluxDB v2 chart is installed with the custom values.
 
 **Access InfluxDB on a Local Host:**
 ```bash
@@ -288,9 +306,9 @@ from(bucket: "CausalRCA")
 
 ## Adapted CausalRCA
 
-**Deploy the adapted CausalRCA first to set up an HTTP server that will listen for incoming requests from the adapted ELBD.**
+CausalRCA is adapted for root cause analysis. The original codebase can be found [here](https://github.com/AXinx/CausalRCA_code).
 
-CausalRCA is tailored for root cause analysis. The original codebase can be found [here](https://github.com/AXinx/CausalRCA_code).
+**Note: deploy the adapted CausalRCA first to set up an HTTP server that will listen for incoming requests from the adapted ELBD.**
 
 **Build Docker Image:**
 ```bash
@@ -316,9 +334,9 @@ kubectl apply -f adapted-causalrca.yaml
 
 ## Adapted ELBD
 
-**Deploy the adapted ELBD only after the adapted CausalRCA is up and running.**
+ELBD is adapted for anomaly detection. The original codebase can be found [here](https://github.com/AXinx/ELBD).
 
-ELBD is customized for anomaly detection. The original codebase can be found [here](https://github.com/AXinx/ELBD).
+**Note: deploy the adapted ELBD only after the adapted CausalRCA is up and running.**
 
 **Build Docker Image:**
 ```bash
